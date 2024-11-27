@@ -13,3 +13,9 @@
     --radius: 0.5rem;
   }
 }
+
+@layer components {
+  section {
+    @apply py-6 bg-white;
+  }
+}

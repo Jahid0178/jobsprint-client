@@ -11,9 +11,47 @@ export const jobTypes: JobType[] = [
     title: "Part Time",
     value: "part-time",
   },
+];
+
+export const jobLocations = [
+  {
+    id: 1,
+    title: "California",
+    value: "california",
+  },
+  {
+    id: 2,
+    title: "San Francisco",
+    value: "san-francisco",
+  },
   {
     id: 3,
-    title: "Contract",
-    value: "contract",
+    title: "New York",
+    value: "new-york",
+  },
+  {
+    id: 4,
+    title: "Georgia",
+    value: "georgia",
+  },
+  {
+    id: 5,
+    title: "Los Angeles",
+    value: "los-angeles",
+  },
+  {
+    id: 6,
+    title: "New Jersey",
+    value: "new-jersey",
+  },
+  {
+    id: 7,
+    title: "Texas",
+    value: "texas",
+  },
+  {
+    id: 8,
+    title: "Washington",
+    value: "washington",
   },
 ];

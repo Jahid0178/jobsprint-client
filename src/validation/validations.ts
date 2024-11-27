@@ -24,3 +24,8 @@ export const registerFormSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export const jobFilterSchema = z.object({
+  location: z.string().min(1, { message: "Location is required" }),
+  contractType: z.string().min(1, { message: "Contract type is required" }),
+});

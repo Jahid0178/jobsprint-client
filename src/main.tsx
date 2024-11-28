@@ -10,6 +10,7 @@ import AddJobPage from "./pages/AddJobPage.tsx";
 import DashboardLayout from "./layouts/DashboardLayout.tsx";
 import ClientLayout from "./layouts/ClientLayout.tsx";
 import AppliedJobsPage from "./pages/AppliedJobsPage.tsx";
+import EditJobPage from "./pages/EditJobPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -43,6 +44,10 @@ createRoot(document.getElementById("root")!).render(
           <Route
             path="/dashboard/job-listings/add"
             element={<AddJobPage />}
+          />
+          <Route
+            path="/dashboard/job-listings/:id/edit"
+            element={<EditJobPage />}
           />
           <Route
             path="/dashboard/applied-jobs"

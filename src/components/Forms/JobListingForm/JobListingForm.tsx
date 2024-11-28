@@ -30,7 +30,7 @@ const JobListingForm = () => {
   return (
     <Form {...form}>
       <form
-        className="space-y-4 max-w-xl mx-auto border p-4 rounded-md"
+        className="space-y-4 border p-4 rounded-md"
         onSubmit={form.handleSubmit((data) => console.log(data))}
       >
         <FormField

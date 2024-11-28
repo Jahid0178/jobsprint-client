@@ -14,9 +14,11 @@ const DashboardSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="border-b py-3.5">
-        <h2 className="text-xl font-semibold tracking-tight text-black">
-          JobSprint
-        </h2>
+        <Link to="/">
+          <h2 className="text-xl font-semibold tracking-tight text-black">
+            JobSprint
+          </h2>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>

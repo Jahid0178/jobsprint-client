@@ -1,5 +1,5 @@
+import { Link } from "react-router";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-
 import {
   Table,
   TableBody,
@@ -31,10 +31,9 @@ const JobListingTable = () => {
           <TableCell>Full Time</TableCell>
           <TableCell>Dhaka</TableCell>
           <TableCell className="flex justify-end items-center gap-1">
-            <TableActionButton
-              icon={FaRegEdit}
-              onClick={() => console.log("edit")}
-            />
+            <Link to="/dashboard/job-listings/45/edit">
+              <TableActionButton icon={FaRegEdit} />
+            </Link>
             <TableActionButton
               icon={FaRegTrashAlt}
               className="text-red-500"

@@ -4,12 +4,12 @@ export const jobTypes: JobType[] = [
   {
     id: 1,
     title: "Full Time",
-    value: "full-time",
+    value: "Full Time",
   },
   {
     id: 2,
     title: "Part Time",
-    value: "part-time",
+    value: "Part Time",
   },
 ];
 
@@ -17,41 +17,41 @@ export const jobLocations = [
   {
     id: 1,
     title: "California",
-    value: "california",
+    value: "California",
   },
   {
     id: 2,
     title: "San Francisco",
-    value: "san-francisco",
+    value: "San Francisco",
   },
   {
     id: 3,
     title: "New York",
-    value: "new-york",
+    value: "New York",
   },
   {
     id: 4,
     title: "Georgia",
-    value: "georgia",
+    value: "Georgia",
   },
   {
     id: 5,
     title: "Los Angeles",
-    value: "los-angeles",
+    value: "Los Angeles",
   },
   {
     id: 6,
     title: "New Jersey",
-    value: "new-jersey",
+    value: "New Jersey",
   },
   {
     id: 7,
     title: "Texas",
-    value: "texas",
+    value: "Texas",
   },
   {
     id: 8,
     title: "Washington",
-    value: "washington",
+    value: "Washington",
   },
 ];

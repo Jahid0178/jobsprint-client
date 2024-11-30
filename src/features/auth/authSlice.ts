@@ -110,12 +110,14 @@ export const authRegisterSlice = createSlice({
       state.token = action.payload.token;
       state.message = action.payload.message;
       state.isAuthenticated = true;
+      state.user = action.payload.data;
     });
     builder.addCase(userLogin.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
     builder.addCase(userLogout.fulfilled, (state, action) => {
+      state.user = null;
       state.loading = false;
       state.success = true;
       state.token = null;
@@ -124,9 +126,14 @@ export const authRegisterSlice = createSlice({
     });
     builder.addCase(userLogout.rejected, (state, action) => {
       state.loading = false;
+      state.success = false;
+      state.token = null;
+      state.user = null;
       state.error = action.payload;
     });
   },
 });
+
+export const { resetState } = authRegisterSlice.actions;
 
 export default authRegisterSlice.reducer;

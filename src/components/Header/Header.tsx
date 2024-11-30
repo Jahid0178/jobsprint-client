@@ -2,8 +2,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
 import { Button } from "../ui/button";
-import { userLogout } from "@/features/auth/authSlice";
-import { resetState } from "@/features/job/jobSlice";
+import { resetState, userLogout } from "@/features/auth/authSlice";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -32,13 +31,15 @@ const Header = () => {
             <li>
               <NavLink to="/">Home</NavLink>
             </li>
-            <li>
-              <NavLink to="/dashboard">Dashboard</NavLink>
-            </li>
             {isAuthenticated ? (
-              <li>
-                <Button onClick={handleLogout}>Logout</Button>
-              </li>
+              <>
+                <li>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
+                </li>
+                <li>
+                  <Button onClick={handleLogout}>Logout</Button>
+                </li>
+              </>
             ) : (
               <>
                 <li>

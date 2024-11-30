@@ -21,12 +21,16 @@ const AppliedJobsPage = () => {
           subTitle="You have applied to these jobs"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {appliedJobs.map((job) => (
-            <JobListingCard
-              key={job._id}
-              job={job}
-            />
-          ))}
+          {appliedJobs.length > 0 ? (
+            appliedJobs.map((job) => (
+              <JobListingCard
+                key={job._id}
+                job={job}
+              />
+            ))
+          ) : (
+            <p className="text-center col-span-full">No applied jobs found</p>
+          )}
         </div>
       </div>
     </section>

@@ -3,7 +3,7 @@ import JobFiltersPanel from "./components/Filters/JobFiltersPanel";
 import JobListingCard from "./components/JobListingCard/JobListingCard";
 import SearchBar from "./components/SearchBar/SearchBar";
 import { AppDispatch, RootState } from "./store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   applyJob,
   fetchJobs,
@@ -14,14 +14,23 @@ import { JobType } from "./typescript/type";
 import toast from "react-hot-toast";
 
 const App = () => {
+  const [query, setQuery] = useState({
+    company: "",
+    location: "",
+    contract: "",
+  });
   const dispatch: AppDispatch = useDispatch();
 
   const { jobs, loading, success, message, error } = useSelector(
     (state: RootState) => state.job
   );
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery({ ...query, [e.target.name]: e.target.value });
+  };
+
   useEffect(() => {
-    dispatch(fetchJobs());
+    dispatch(fetchJobs(query));
   }, []);
 
   const handleJobApply = (job: JobType) => {
@@ -29,7 +38,13 @@ const App = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchJobs(query));
+  }, [query]);
+
+  useEffect(() => {
     if (success && !loading && !error) {
+      console.log("message", message);
+      console.log(loading);
       toast.success(message);
       dispatch(getAppliedJobs());
       dispatch(resetState());
@@ -42,27 +57,40 @@ const App = () => {
     return () => {
       dispatch(resetState());
     };
-  }, [success, loading, error, dispatch, message]);
+  }, [success, error, dispatch, message]);
+
+  const setQueryPartial: (
+    data: Partial<{ company: string; location: string; contract: string }>
+  ) => void = (data) => {
+    setQuery((prevQuery) => ({ ...prevQuery, ...data }));
+  };
 
   return (
     <section>
       <div className="container">
         <div className="mb-4">
-          <SearchBar />
+          <SearchBar
+            name={"company"}
+            onChange={(e) => handleSearch(e)}
+          />
         </div>
         <div className="flex justify-between items-center gap-4 mb-5">
           <h2 className="text-2xl font-semibold">All Job Listings</h2>
-          <JobFiltersPanel />
+          <JobFiltersPanel setQuery={setQueryPartial} />
         </div>
-        {loading && <p className="text-center">Loading...</p>}
+        {loading && <p className="text-center text-4xl">Loading...</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {jobs.map((job: JobType) => (
-            <JobListingCard
-              key={job._id}
-              job={job}
-              handleJobApply={handleJobApply}
-            />
-          ))}
+          {jobs.length > 0 ? (
+            jobs.map((job: JobType) => (
+              <JobListingCard
+                key={job._id}
+                job={job}
+                handleJobApply={handleJobApply}
+              />
+            ))
+          ) : (
+            <p className="text-center text-2xl col-span-full">No jobs found</p>
+          )}
         </div>
       </div>
     </section>

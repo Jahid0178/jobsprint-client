@@ -64,10 +64,33 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+// user logout action
+export const userLogout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_BACKEND_URL}/users/logout`
+      );
+      return response.data;
+    } catch (error) {
+      const errorResponse = error as { response: { data: string } };
+      return rejectWithValue(errorResponse.response.data);
+    }
+  }
+);
+
 export const authRegisterSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+      state.isAuthenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(userRegister.pending, (state) => {
       state.loading = true;
@@ -87,6 +110,21 @@ export const authRegisterSlice = createSlice({
       state.token = action.payload.token;
       state.message = action.payload.message;
       state.isAuthenticated = true;
+    });
+    builder.addCase(userLogin.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(userLogout.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.token = null;
+      state.message = action.payload.message;
+      state.isAuthenticated = false;
+    });
+    builder.addCase(userLogout.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
   },
 });

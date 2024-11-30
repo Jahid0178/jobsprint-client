@@ -30,17 +30,30 @@ import { jobLocations, jobTypes } from "@/data/data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { jobFilterSchema } from "@/validation/validations";
 
-const JobFiltersPanel = () => {
+interface JobFiltersPanelProps {
+  setQuery: (data: {
+    company?: string;
+    location: string;
+    contract: string;
+  }) => void;
+}
+
+const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
   const form = useForm<z.infer<typeof jobFilterSchema>>({
     resolver: zodResolver(jobFilterSchema),
     defaultValues: {
       location: "",
-      contractType: "",
+      contract: "",
     },
   });
 
-  const handleJobFilter = (data: z.infer<typeof jobFilterSchema>) => {
-    console.log("filter data: ", data);
+  const clearFilters = () => {
+    form.reset();
+    setQuery({
+      company: "",
+      location: "",
+      contract: "",
+    });
   };
 
   return (
@@ -50,7 +63,7 @@ const JobFiltersPanel = () => {
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit((data) => handleJobFilter(data))}>
+          <form onSubmit={form.handleSubmit((data) => setQuery(data))}>
             <DialogHeader className="mb-4">
               <DialogTitle>Filter Jobs By Panel</DialogTitle>
               <DialogDescription>
@@ -88,7 +101,7 @@ const JobFiltersPanel = () => {
               />
               <FormField
                 control={form.control}
-                name="contractType"
+                name="contract"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Contract Type</FormLabel>
@@ -118,6 +131,7 @@ const JobFiltersPanel = () => {
               />
             </div>
             <DialogFooter>
+              <Button onClick={clearFilters}>Clear</Button>
               <Button type="submit">Apply</Button>
             </DialogFooter>
           </form>

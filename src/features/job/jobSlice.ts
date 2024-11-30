@@ -20,11 +20,21 @@ interface InitialStateProps {
 }
 
 // fetch all jobs action
-export const fetchJobs = createAsyncThunk<ApiResponse>(
+export const fetchJobs = createAsyncThunk<ApiResponse, Record<string, string>>(
   "job/fetchJobs",
-  async () => {
+  async (query: Record<string, string>) => {
+    let queryString = "";
+
+    for (const key in query) {
+      if (query[key]) {
+        queryString += `&${key}=${query[key]}`;
+      }
+    }
+
+    console.log(queryString);
+
     const response = await axios.get(
-      `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs`
+      `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs?${queryString}`
     );
     return response.data;
   }
@@ -233,7 +243,6 @@ const jobSlice = createSlice({
       state.error = action.payload;
     });
     builder.addCase(getAppliedJobs.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.loading = false;
       state.appliedJobs = action.payload.data.appliedJobs as JobType[];
       state.error = null;

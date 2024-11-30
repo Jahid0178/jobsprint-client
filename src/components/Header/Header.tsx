@@ -1,6 +1,28 @@
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
+import { Button } from "../ui/button";
+import { userLogout } from "@/features/auth/authSlice";
+import { resetState } from "@/features/job/jobSlice";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Header = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated, loading, error, message } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const handleLogout = () => {
+    dispatch(userLogout());
+  };
+
+  useEffect(() => {
+    if (!isAuthenticated && !loading && !error) {
+      toast.success(message);
+      localStorage.removeItem("jobsprint-auth-token");
+      dispatch(resetState());
+    }
+  }, [isAuthenticated, loading, error]);
   return (
     <header className="py-4 bg-gray-200">
       <div className="container">
@@ -13,12 +35,20 @@ const Header = () => {
             <li>
               <NavLink to="/dashboard">Dashboard</NavLink>
             </li>
-            <li>
-              <NavLink to="/auth/login">Login</NavLink>
-            </li>
-            <li>
-              <NavLink to="/auth/register">Register</NavLink>
-            </li>
+            {isAuthenticated ? (
+              <li>
+                <Button onClick={handleLogout}>Logout</Button>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <NavLink to="/auth/login">Login</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/auth/register">Register</NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

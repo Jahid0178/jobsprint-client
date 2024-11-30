@@ -11,6 +11,7 @@ import { FaFileContract } from "react-icons/fa6";
 import { JobType } from "@/typescript/type";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Link } from "react-router";
 
 interface JobListingCardProps {
   job: JobType;
@@ -21,6 +22,7 @@ const JobListingCard = ({
   job,
   handleJobApply = () => {},
 }: JobListingCardProps) => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const { appliedJobs } = useSelector((state: RootState) => state.job);
 
   const { _id, company, position, contract, location } = job;
@@ -30,9 +32,14 @@ const JobListingCard = ({
   return (
     <Card className="bg-white">
       <CardHeader>
-        <CardTitle>{company}</CardTitle>
+        <img
+          src="https://placehold.co/600x400?text=Job+Sprint"
+          alt="job-listing-image"
+          className="rounded-md"
+        />
       </CardHeader>
       <CardContent className="space-y-3">
+        <CardTitle className="text-2xl">{company}</CardTitle>
         <p className="flex items-center gap-2">
           <FaUserTie size={16} /> {position}
         </p>
@@ -44,14 +51,22 @@ const JobListingCard = ({
         </p>
       </CardContent>
       <CardFooter>
-        <Button
-          onClick={() => handleJobApply(job)}
-          disabled={btnDisabled}
-          className={`${btnDisabled ? "cursor-not-allowed" : "cursor-pointer"}`}
-        >
-          {}
-          {btnDisabled ? "Applied" : "Apply"}
-        </Button>
+        {isAuthenticated ? (
+          <Button
+            onClick={() => handleJobApply(job)}
+            disabled={btnDisabled}
+            className={`${
+              btnDisabled ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+          >
+            {}
+            {btnDisabled ? "Applied" : "Apply"}
+          </Button>
+        ) : (
+          <Button asChild>
+            <Link to="/auth/login">Apply</Link>
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

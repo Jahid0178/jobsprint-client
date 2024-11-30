@@ -14,8 +14,14 @@ const Authenticated = ({ children }: Props) => {
   const jobSprintToken = localStorage.getItem("jobsprint-auth-token");
 
   if (jobSprintToken) {
-    const decodedToken = jwtDecode<IJwtPayload>(jobSprintToken) as IJwtPayload;
-    dispatch(setUser(decodedToken));
+    try {
+      const decodedToken = jwtDecode<IJwtPayload>(
+        jobSprintToken
+      ) as IJwtPayload;
+      dispatch(setUser(decodedToken));
+    } catch (error) {
+      console.log(error);
+    }
   }
   return <>{children}</>;
 };

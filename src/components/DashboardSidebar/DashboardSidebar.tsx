@@ -9,20 +9,15 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { Button } from "../ui/button";
-import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
-import { IJwtPayload } from "@/typescript/interface";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { logOut, resetState } from "@/features/auth/authSlice";
 import toast from "react-hot-toast";
 
 const DashboardSidebar = () => {
-  const [role, setRole] = useState("");
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigate();
-  const jobSprintToken = localStorage.getItem("jobsprint-auth-token") ?? "";
-  const decodedToken = jobSprintToken && jwtDecode<IJwtPayload>(jobSprintToken);
 
   const handleLogout = () => {
     localStorage.removeItem("jobsprint-auth-token");
@@ -32,11 +27,6 @@ const DashboardSidebar = () => {
     navigation("/");
   };
 
-  useEffect(() => {
-    if (decodedToken) {
-      setRole(decodedToken.role ?? "");
-    }
-  }, [decodedToken]);
   return (
     <Sidebar>
       <SidebarHeader className="border-b py-3.5">
@@ -48,7 +38,7 @@ const DashboardSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {role === "admin" ? (
+          {user?.role === "admin" ? (
             <>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>

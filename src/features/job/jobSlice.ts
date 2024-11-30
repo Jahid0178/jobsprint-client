@@ -17,6 +17,7 @@ interface InitialStateProps {
   success: boolean;
   message: string | null;
   error: string | null | unknown;
+  adminJobs: JobType[];
 }
 
 // fetch all jobs action
@@ -108,6 +109,7 @@ export const editPost = createAsyncThunk(
   }
 );
 
+// delete job post action
 export const deleteJobPost = createAsyncThunk(
   "job/deleteJob",
   async (id: string, { rejectWithValue }) => {
@@ -132,6 +134,7 @@ export const deleteJobPost = createAsyncThunk(
   }
 );
 
+// apply job action
 export const applyJob = createAsyncThunk(
   "job/apply",
   async (id: string, { rejectWithValue }) => {
@@ -157,6 +160,7 @@ export const applyJob = createAsyncThunk(
   }
 );
 
+// get applied job action
 export const getAppliedJobs = createAsyncThunk(
   "job/getAppliedJobs",
   async (_, { rejectWithValue }) => {
@@ -181,6 +185,25 @@ export const getAppliedJobs = createAsyncThunk(
   }
 );
 
+// get admin jobs
+export const getAdminJobs = createAsyncThunk("get/adminJobs", async () => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/adminJobs`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(
+            "jobsprint-auth-token"
+          )}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("get error from admin jobs", error);
+  }
+});
+
 const initialState: InitialStateProps = {
   jobs: [] as JobType[],
   job: {} as JobType,
@@ -189,6 +212,7 @@ const initialState: InitialStateProps = {
   success: false,
   message: null,
   error: null,
+  adminJobs: [],
 };
 
 const jobSlice = createSlice({
@@ -270,6 +294,19 @@ const jobSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getAppliedJobs.rejected, (state, action) => {
+      state.loading = false;
+      state.appliedJobs = [];
+      state.error = action.error.message ?? null;
+    });
+    builder.addCase(getAdminJobs.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAdminJobs.fulfilled, (state, action) => {
+      state.loading = false;
+      state.adminJobs = action.payload.data;
+      state.error = null;
+    });
+    builder.addCase(getAdminJobs.rejected, (state, action) => {
       state.loading = false;
       state.appliedJobs = [];
       state.error = action.error.message ?? null;

@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerFormSchema } from "@/validation/validations";
 import { useDispatch, useSelector } from "react-redux";
-import { userRegister } from "@/features/auth/authSlice";
+import { resetState, userRegister } from "@/features/auth/authSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
@@ -47,6 +47,7 @@ const RegisterPage = () => {
   useEffect(() => {
     if (success && !error) {
       toast.success("User registered successfully");
+      dispatch(resetState());
       navigate("/auth/login");
     }
   }, [success, error]);

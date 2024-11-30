@@ -48,9 +48,9 @@ const LoginPage = () => {
     if (success && !loading) {
       if (token !== null) {
         localStorage.setItem("jobsprint-auth-token", token);
+        toast.success(message);
+        navigate("/");
       }
-      toast.success(message);
-      navigate("/");
     }
   }, [isAuthenticated, success]);
   return (

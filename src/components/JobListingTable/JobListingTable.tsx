@@ -13,16 +13,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { JobType } from "@/typescript/type";
 import { useEffect } from "react";
-import { deleteJobPost, fetchJobs, resetState } from "@/features/job/jobSlice";
+import {
+  deleteJobPost,
+  getAdminJobs,
+  resetState,
+} from "@/features/job/jobSlice";
 import toast from "react-hot-toast";
 
 const JobListingTable = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { jobs, success, loading, message } = useSelector(
+  const { adminJobs, success, loading, message } = useSelector(
     (state: RootState) => state.job
   );
   useEffect(() => {
-    dispatch(fetchJobs());
+    dispatch(getAdminJobs());
   }, []);
 
   const handleDelete = (id: string) => {
@@ -32,7 +36,7 @@ const JobListingTable = () => {
     if (success && !loading) {
       toast.success(message);
       dispatch(resetState());
-      dispatch(fetchJobs());
+      dispatch(getAdminJobs());
     }
   }, [success, loading]);
 
@@ -49,7 +53,7 @@ const JobListingTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {jobs.map((job: JobType, index: number) => (
+        {adminJobs.map((job: JobType, index: number) => (
           <TableRow key={job._id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{job.company}</TableCell>

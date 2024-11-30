@@ -15,11 +15,13 @@ import { Link } from "react-router";
 
 interface JobListingCardProps {
   job: JobType;
+  inAppliedJobPage?: boolean;
   handleJobApply?: (job: JobType) => void;
 }
 
 const JobListingCard = ({
   job,
+  inAppliedJobPage = false,
   handleJobApply = () => {},
 }: JobListingCardProps) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -50,24 +52,26 @@ const JobListingCard = ({
           <FaLocationArrow size={16} /> {location}
         </p>
       </CardContent>
-      <CardFooter>
-        {isAuthenticated ? (
-          <Button
-            onClick={() => handleJobApply(job)}
-            disabled={btnDisabled}
-            className={`${
-              btnDisabled ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
-          >
-            {}
-            {btnDisabled ? "Applied" : "Apply"}
-          </Button>
-        ) : (
-          <Button asChild>
-            <Link to="/auth/login">Apply</Link>
-          </Button>
-        )}
-      </CardFooter>
+      {!inAppliedJobPage && (
+        <CardFooter>
+          {isAuthenticated ? (
+            <Button
+              onClick={() => handleJobApply(job)}
+              disabled={btnDisabled}
+              className={`${
+                btnDisabled ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
+            >
+              {}
+              {btnDisabled ? "Applied" : "Apply"}
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link to="/auth/login">Apply</Link>
+            </Button>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };

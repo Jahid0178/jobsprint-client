@@ -26,6 +26,7 @@ const AppliedJobsPage = () => {
               <JobListingCard
                 key={job._id}
                 job={job}
+                inAppliedJobPage={true}
               />
             ))
           ) : (

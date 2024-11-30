@@ -26,6 +26,6 @@ export const registerFormSchema = z
   });
 
 export const jobFilterSchema = z.object({
-  location: z.string().min(1, { message: "Location is required" }),
-  contract: z.string().min(1, { message: "Contract type is required" }),
+  location: z.string(),
+  contract: z.string(),
 });

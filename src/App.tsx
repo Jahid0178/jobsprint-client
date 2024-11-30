@@ -72,6 +72,7 @@ const App = () => {
           <SearchBar
             name={"company"}
             onChange={(e) => handleSearch(e)}
+            type="search"
           />
         </div>
         <div className="flex justify-between items-center gap-4 mb-5">

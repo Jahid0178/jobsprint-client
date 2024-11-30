@@ -8,7 +8,9 @@ import toast from "react-hot-toast";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
   const handleLogout = () => {
     localStorage.removeItem("jobsprint-auth-token");
     dispatch(logOut());
@@ -28,7 +30,15 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 <li>
-                  <NavLink to="/dashboard">Dashboard</NavLink>
+                  <NavLink
+                    to={
+                      user && user.role === "admin"
+                        ? "/dashboard/job-listings"
+                        : "/dashboard/applied-jobs"
+                    }
+                  >
+                    Dashboard
+                  </NavLink>
                 </li>
                 <li>
                   <Button onClick={handleLogout}>Logout</Button>

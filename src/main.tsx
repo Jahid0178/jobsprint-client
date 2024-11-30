@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App.tsx";
@@ -42,10 +42,7 @@ createRoot(document.getElementById("root")!).render(
                 </Route>
               </Route>
             </Route>
-            <Route
-              path="/dashboard"
-              element={<DashboardLayout />}
-            >
+            <Route element={<DashboardLayout />}>
               <Route element={<RoleLayout role={"admin"} />}>
                 <Route
                   path="/dashboard/job-listings"
@@ -67,6 +64,10 @@ createRoot(document.getElementById("root")!).render(
                 />
               </Route>
             </Route>
+            <Route
+              path="*"
+              element={<Navigate to="/" />}
+            />
           </Routes>
         </BrowserRouter>
       </Authenticated>

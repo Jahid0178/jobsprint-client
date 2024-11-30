@@ -49,9 +49,9 @@ const JobListingTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {jobs.map((job: JobType) => (
+        {jobs.map((job: JobType, index: number) => (
           <TableRow key={job._id}>
-            <TableCell className="font-medium">INV001</TableCell>
+            <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{job.company}</TableCell>
             <TableCell>{job.position}</TableCell>
             <TableCell>{job.contract}</TableCell>

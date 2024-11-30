@@ -31,11 +31,13 @@ interface JobListingFormProps {
     contract: string;
   };
   handleSubmit: (data: JobType) => void;
+  btnValue: string;
 }
 
 const JobListingForm = ({
   initialValues,
   handleSubmit,
+  btnValue = "Add Job",
 }: JobListingFormProps) => {
   const { id } = useParams();
   const { job } = useSelector((state: RootState) => state.job);
@@ -149,7 +151,7 @@ const JobListingForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit">Add Job</Button>
+        <Button type="submit">{btnValue}</Button>
       </form>
     </Form>
   );

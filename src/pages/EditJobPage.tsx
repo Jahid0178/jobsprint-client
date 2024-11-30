@@ -48,6 +48,7 @@ const EditJobPage = () => {
         <JobListingForm
           initialValues={initialValues}
           handleSubmit={handleSubmit}
+          btnValue="Update Job"
         />
       </div>
     </section>

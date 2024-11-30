@@ -16,12 +16,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerFormSchema } from "@/validation/validations";
+import { useDispatch, useSelector } from "react-redux";
+import { userRegister } from "@/features/auth/authSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { success, error } = useSelector((state: RootState) => state.auth);
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -33,11 +41,18 @@ const RegisterPage = () => {
   });
 
   const handleSubmit = (data: z.infer<typeof registerFormSchema>) => {
-    console.log("register form data: ", data);
+    dispatch(userRegister(data));
   };
 
+  useEffect(() => {
+    if (success && !error) {
+      toast.success("User registered successfully");
+      navigate("/auth/login");
+    }
+  }, [success, error]);
+
   return (
-    <section className="min-h-screen flex justify-center items-center">
+    <section className="min-h-screen flex flex-col justify-center items-center">
       <div className="container">
         <Form {...form}>
           <form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>

@@ -16,22 +16,46 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { jobLocations, jobTypes } from "@/data/data";
+import { RootState } from "@/store/store";
+import { JobType } from "@/typescript/type";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
-const JobListingForm = () => {
+interface JobListingFormProps {
+  initialValues: {
+    company: string;
+    position: string;
+    location: string;
+    contract: string;
+  };
+  handleSubmit: (data: JobType) => void;
+}
+
+const JobListingForm = ({
+  initialValues,
+  handleSubmit,
+}: JobListingFormProps) => {
+  const { id } = useParams();
+  const { job } = useSelector((state: RootState) => state.job);
   const form = useForm({
-    defaultValues: {
-      company: "",
-      position: "",
-      contract: "",
-      location: "",
-    },
+    defaultValues: initialValues,
   });
+
+  useEffect(() => {
+    if (Object.keys(job as JobType).length > 0 && id === job?._id) {
+      form.reset({
+        ...job,
+      });
+    }
+  }, [job]);
+
   return (
     <Form {...form}>
       <form
         className="space-y-4 border p-4 rounded-md"
-        onSubmit={form.handleSubmit((data) => console.log(data))}
+        onSubmit={form.handleSubmit((data) => handleSubmit(data))}
       >
         <FormField
           control={form.control}
@@ -73,7 +97,7 @@ const JobListingForm = () => {
               <FormLabel>Location</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value}
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -103,7 +127,7 @@ const JobListingForm = () => {
               <FormLabel>Contract</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value}
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger>

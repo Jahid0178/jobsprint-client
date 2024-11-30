@@ -16,12 +16,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema } from "@/validation/validations";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { userLogin } from "@/features/auth/authSlice";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { success, message, isAuthenticated, loading, token } = useSelector(
+    (state: RootState) => state.auth
+  );
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -29,11 +39,25 @@ const LoginPage = () => {
       password: "",
     },
   });
+
+  const handleFormSubmit = (data: z.infer<typeof loginFormSchema>) => {
+    dispatch(userLogin(data));
+  };
+
+  useEffect(() => {
+    if (success && !loading) {
+      if (token !== null) {
+        localStorage.setItem("jobsprint-auth-token", token);
+      }
+      toast.success(message);
+      navigate("/");
+    }
+  }, [isAuthenticated, success]);
   return (
     <section className="min-h-screen flex justify-center items-center">
       <div className="container">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+          <form onSubmit={form.handleSubmit((data) => handleFormSubmit(data))}>
             <Card className="w-96 mx-auto bg-white">
               <CardHeader>
                 <CardTitle>Login to JobSprint</CardTitle>

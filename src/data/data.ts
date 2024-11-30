@@ -1,6 +1,6 @@
-import { JobType } from "@/typescript/type";
+import { ContractType } from "@/typescript/type";
 
-export const jobTypes: JobType[] = [
+export const jobTypes: ContractType[] = [
   {
     id: 1,
     title: "Full Time",

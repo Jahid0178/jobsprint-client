@@ -9,8 +9,20 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { Button } from "../ui/button";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { IJwtPayload } from "@/typescript/interface";
 
 const DashboardSidebar = () => {
+  const [role, setRole] = useState("");
+  const jobSprintToken = localStorage.getItem("jobsprint-auth-token") ?? "";
+  const decodedToken = jobSprintToken && jwtDecode<IJwtPayload>(jobSprintToken);
+
+  useEffect(() => {
+    if (decodedToken) {
+      setRole(decodedToken.role ?? "");
+    }
+  }, [decodedToken]);
   return (
     <Sidebar>
       <SidebarHeader className="border-b py-3.5">
@@ -22,21 +34,33 @@ const DashboardSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/dashboard/job-listings">Job Listings</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/dashboard/job-listings/add">Add Job</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/dashboard/applied-jobs">Applied Jobs</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {role === "admin" ? (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dashboard/job-listings">Job Listings</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dashboard/job-listings/add">Add Job</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
+          ) : (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/">Jobs</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dashboard/applied-jobs">Applied Jobs</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
+          )}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>

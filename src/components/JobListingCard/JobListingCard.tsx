@@ -32,12 +32,11 @@ const JobListingCard = ({
   const btnDisabled = appliedJobs.some((job) => job._id === _id);
 
   return (
-    <Card className="bg-white">
-      <CardHeader>
+    <Card className="bg-white overflow-hidden">
+      <CardHeader className="p-0 pb-6">
         <img
           src="https://placehold.co/600x400?text=Job+Sprint"
           alt="job-listing-image"
-          className="rounded-md"
         />
       </CardHeader>
       <CardContent className="space-y-3">

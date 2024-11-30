@@ -29,6 +29,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { jobLocations, jobTypes } from "@/data/data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { jobFilterSchema } from "@/validation/validations";
+import { useState } from "react";
 
 interface JobFiltersPanelProps {
   setQuery: (data: {
@@ -39,6 +40,7 @@ interface JobFiltersPanelProps {
 }
 
 const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
+  const [open, setOpen] = useState<boolean>(false);
   const form = useForm<z.infer<typeof jobFilterSchema>>({
     resolver: zodResolver(jobFilterSchema),
     defaultValues: {
@@ -46,6 +48,11 @@ const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
       contract: "",
     },
   });
+
+  const handleFormSubmit = (data: z.infer<typeof jobFilterSchema>) => {
+    setQuery(data);
+    setOpen(false);
+  };
 
   const clearFilters = () => {
     form.reset();
@@ -57,13 +64,16 @@ const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
       <DialogTrigger asChild>
         <Button variant={"outline"}>Filter Jobs</Button>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit((data) => setQuery(data))}>
+          <form onSubmit={form.handleSubmit((data) => handleFormSubmit(data))}>
             <DialogHeader className="mb-4">
               <DialogTitle>Filter Jobs By Panel</DialogTitle>
               <DialogDescription>

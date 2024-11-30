@@ -11,7 +11,7 @@ const RoleLayout = ({ role }: RoleLayoutProps) => {
   const jobSprintToken = localStorage.getItem("jobsprint-auth-token");
 
   if (!jobSprintToken) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/auth/login" />;
   }
 
   if (user?.role === role) {

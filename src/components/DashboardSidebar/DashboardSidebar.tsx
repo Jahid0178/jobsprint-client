@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   Sidebar,
   SidebarContent,
@@ -12,11 +12,25 @@ import { Button } from "../ui/button";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { IJwtPayload } from "@/typescript/interface";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { logOut, resetState } from "@/features/auth/authSlice";
+import toast from "react-hot-toast";
 
 const DashboardSidebar = () => {
   const [role, setRole] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigate();
   const jobSprintToken = localStorage.getItem("jobsprint-auth-token") ?? "";
   const decodedToken = jobSprintToken && jwtDecode<IJwtPayload>(jobSprintToken);
+
+  const handleLogout = () => {
+    localStorage.removeItem("jobsprint-auth-token");
+    dispatch(logOut());
+    dispatch(resetState());
+    toast.success("Logout successful");
+    navigation("/");
+  };
 
   useEffect(() => {
     if (decodedToken) {
@@ -64,7 +78,7 @@ const DashboardSidebar = () => {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <Button>Log Out</Button>
+        <Button onClick={handleLogout}>Log Out</Button>
       </SidebarFooter>
     </Sidebar>
   );

@@ -12,6 +12,7 @@ import {
 } from "./features/job/jobSlice";
 import { JobType } from "./typescript/type";
 import toast from "react-hot-toast";
+import useDebouncedCallback from "./hooks/useDebouncedCallback";
 
 const App = () => {
   const [query, setQuery] = useState({
@@ -25,21 +26,21 @@ const App = () => {
     (state: RootState) => state.job
   );
 
+  const debouncedFetchJobs = useDebouncedCallback(() => {
+    dispatch(fetchJobs(query));
+  }, 1000);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery({ ...query, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
-    dispatch(fetchJobs(query));
-  }, []);
+    debouncedFetchJobs();
+  }, [query]);
 
   const handleJobApply = (job: JobType) => {
     dispatch(applyJob(job._id as string));
   };
-
-  useEffect(() => {
-    dispatch(fetchJobs(query));
-  }, [query]);
 
   useEffect(() => {
     if (success && !loading && !error) {

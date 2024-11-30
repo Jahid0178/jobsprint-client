@@ -1,3 +1,4 @@
+import { UserType } from "@/typescript/type";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -8,13 +9,19 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const DashboardHeaderActionButton = () => {
+interface DashboardHeaderActionButtonProps {
+  user: UserType;
+}
+
+const DashboardHeaderActionButton = ({
+  user,
+}: DashboardHeaderActionButtonProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>{user.fullName[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

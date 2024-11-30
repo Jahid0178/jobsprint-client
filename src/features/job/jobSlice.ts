@@ -49,7 +49,11 @@ export const postJob = createAsyncThunk(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/create`,
         data,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;
@@ -67,7 +71,11 @@ export const singleJobPost = createAsyncThunk(
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/${id}`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;
@@ -86,7 +94,11 @@ export const editPost = createAsyncThunk(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/update/${data._id}`,
         data,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;
@@ -103,7 +115,11 @@ export const deleteJobPost = createAsyncThunk(
       const response = await axios.delete(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/delete/${id}`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;
@@ -124,7 +140,11 @@ export const applyJob = createAsyncThunk(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/apply/${id}`,
         {},
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;
@@ -144,7 +164,11 @@ export const getAppliedJobs = createAsyncThunk(
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs/appliedJobs`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "jobsprint-auth-token"
+            )}`,
+          },
         }
       );
       return response.data;

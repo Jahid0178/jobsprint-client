@@ -1,27 +1,21 @@
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { Button } from "../ui/button";
-import { resetState, userLogout } from "@/features/auth/authSlice";
-import { useEffect } from "react";
+import { logOut, resetState } from "@/features/auth/authSlice";
 import toast from "react-hot-toast";
 
 const Header = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated, loading, error, message } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const handleLogout = () => {
-    dispatch(userLogout());
+    localStorage.removeItem("jobsprint-auth-token");
+    dispatch(logOut());
+    dispatch(resetState());
+    toast.success("Logout successful");
+    navigate("/");
   };
-
-  useEffect(() => {
-    if (!isAuthenticated && !loading && !error) {
-      toast.success(message);
-      localStorage.removeItem("jobsprint-auth-token");
-      dispatch(resetState());
-    }
-  }, [isAuthenticated, loading, error]);
   return (
     <header className="py-4 bg-gray-200">
       <div className="container">

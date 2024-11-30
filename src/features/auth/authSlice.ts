@@ -72,6 +72,7 @@ export const userLogout = createAsyncThunk(
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_BACKEND_URL}/users/logout`
       );
+
       return response.data;
     } catch (error) {
       const errorResponse = error as { response: { data: string } };
@@ -84,6 +85,15 @@ export const authRegisterSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    logOut: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.token = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    },
     resetState: (state) => {
       state.loading = false;
       state.error = null;
@@ -134,6 +144,6 @@ export const authRegisterSlice = createSlice({
   },
 });
 
-export const { resetState } = authRegisterSlice.actions;
+export const { resetState, setUser, logOut } = authRegisterSlice.actions;
 
 export default authRegisterSlice.reducer;

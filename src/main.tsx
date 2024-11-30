@@ -16,57 +16,60 @@ import { store } from "./store/store.ts";
 import { Toaster } from "react-hot-toast";
 import GuardLayout from "./layouts/GuardLayout.tsx";
 import RoleLayout from "./layouts/RoleLayout.tsx";
+import Authenticated from "./components/Authenticated.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<ClientLayout />}>
+      <Authenticated>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<ClientLayout />}>
+              <Route
+                path="/"
+                element={<App />}
+              />
+              <Route path="auth">
+                <Route element={<GuardLayout />}>
+                  <Route
+                    path="/auth/login"
+                    element={<LoginPage />}
+                  />
+                  <Route
+                    path="/auth/register"
+                    element={<RegisterPage />}
+                  />
+                </Route>
+              </Route>
+            </Route>
             <Route
-              path="/"
-              element={<App />}
-            />
-            <Route path="auth">
-              <Route element={<GuardLayout />}>
+              path="/dashboard"
+              element={<DashboardLayout />}
+            >
+              <Route element={<RoleLayout role={"admin"} />}>
                 <Route
-                  path="/auth/login"
-                  element={<LoginPage />}
+                  path="/dashboard/job-listings"
+                  element={<JobListingsPage />}
                 />
                 <Route
-                  path="/auth/register"
-                  element={<RegisterPage />}
+                  path="/dashboard/job-listings/add"
+                  element={<AddJobPage />}
+                />
+                <Route
+                  path="/dashboard/job-listings/:id/edit"
+                  element={<EditJobPage />}
+                />
+              </Route>
+              <Route element={<RoleLayout role="user" />}>
+                <Route
+                  path="/dashboard/applied-jobs"
+                  element={<AppliedJobsPage />}
                 />
               </Route>
             </Route>
-          </Route>
-          <Route
-            path="/dashboard"
-            element={<DashboardLayout />}
-          >
-            <Route element={<RoleLayout role={"admin"} />}>
-              <Route
-                path="/dashboard/job-listings"
-                element={<JobListingsPage />}
-              />
-              <Route
-                path="/dashboard/job-listings/add"
-                element={<AddJobPage />}
-              />
-              <Route
-                path="/dashboard/job-listings/:id/edit"
-                element={<EditJobPage />}
-              />
-            </Route>
-            <Route element={<RoleLayout role="user" />}>
-              <Route
-                path="/dashboard/applied-jobs"
-                element={<AppliedJobsPage />}
-              />
-            </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </Authenticated>
       <Toaster />
     </Provider>
   </StrictMode>

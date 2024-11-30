@@ -1,21 +1,20 @@
 import { Navigate, Outlet } from "react-router";
-import { jwtDecode } from "jwt-decode";
-import { IJwtPayload } from "@/typescript/interface";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface RoleLayoutProps {
   role: string;
 }
 
 const RoleLayout = ({ role }: RoleLayoutProps) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const jobSprintToken = localStorage.getItem("jobsprint-auth-token");
 
   if (!jobSprintToken) {
     return <Navigate to="/login" />;
   }
 
-  const decodedToken = jwtDecode<IJwtPayload>(jobSprintToken) as IJwtPayload;
-
-  if (decodedToken?.role === role) {
+  if (user?.role === role) {
     return <Outlet />;
   }
 

@@ -89,7 +89,13 @@ const App = () => {
               />
             ))
           ) : (
-            <p className="text-center text-2xl col-span-full">No jobs found</p>
+            <>
+              {!loading && (
+                <p className="text-center text-2xl col-span-full">
+                  No jobs found
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

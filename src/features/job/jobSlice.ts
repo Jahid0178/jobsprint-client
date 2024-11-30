@@ -20,23 +20,23 @@ interface InitialStateProps {
 }
 
 // fetch all jobs action
-export const fetchJobs = createAsyncThunk<ApiResponse, Record<string, string>>(
-  "job/fetchJobs",
-  async (query: Record<string, string>) => {
-    let queryString = "";
+export const fetchJobs = createAsyncThunk<
+  ApiResponse,
+  Record<string, string> | undefined
+>("job/fetchJobs", async (query: Record<string, string> = {}) => {
+  let queryString = "";
 
-    for (const key in query) {
-      if (query[key]) {
-        queryString += `&${key}=${query[key]}`;
-      }
+  for (const key in query) {
+    if (query[key]) {
+      queryString += `&${key}=${query[key]}`;
     }
-
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs?${queryString}`
-    );
-    return response.data;
   }
-);
+
+  const response = await axios.get(
+    `${import.meta.env.VITE_BASE_BACKEND_URL}/jobs?${queryString}`
+  );
+  return response.data;
+});
 
 // post a new job action
 export const postJob = createAsyncThunk(

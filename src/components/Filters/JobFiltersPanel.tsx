@@ -80,7 +80,7 @@ const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
                 You can filter jobs by location and contract type
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-4 mb-4">
               <FormField
                 control={form.control}
                 name="location"
@@ -140,7 +140,7 @@ const JobFiltersPanel = ({ setQuery }: JobFiltersPanelProps) => {
                 )}
               />
             </div>
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button onClick={clearFilters}>Clear</Button>
               <Button type="submit">Apply</Button>
             </DialogFooter>
